@@ -13,7 +13,7 @@ public class KickerRatingBot extends TelegramLongPollingBot {
 
         message = switch (update.getMessage().getText()) {
             case "/newresult":
-                yield message.setReplyMarkup(ReplyKeyboardBuilder.createReply()
+                yield message.setText("Reply Menu").setReplyMarkup(ReplyKeyboardBuilder.createReply()
                         .row().addText("Player 1")
                         .row().addText("Player 2")
                         .row().addText("Player 3")
@@ -29,7 +29,7 @@ public class KickerRatingBot extends TelegramLongPollingBot {
         };
 
         try {
-            execute(message);
+            sendApiMethod(message);
         } catch (TelegramApiException ignored) {
         }
     }
