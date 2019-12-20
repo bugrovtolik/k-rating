@@ -24,44 +24,27 @@ public class Main {
 	private Rating player4;
 
 	public static void main(String[] args) {
+		System.out.println("in main");
 
 		final String portNumber = System.getenv("PORT");
 		if (portNumber != null) {
 			port(Integer.parseInt(portNumber));
 		}
 
-		// current app url to set webhook
-		// should be set via heroku config vars
-		// https://devcenter.heroku.com/articles/config-vars
-		// heroku config:set APP_URL=https://app-for-my-bot.herokuapp.com
 		final String appUrl = System.getenv("APP_URL");
 
 		// define list of bots
-		BotHandler[] bots = new BotHandler[]{new TestTelegramBot()};
-
-		// set bot to listen https://my-app.heroku.com/BOTTOKEN
-		// register this URL as Telegram Webhook
-		for (BotHandler bot : bots) {
-			String token = bot.getToken();
-			post("/" + token, bot);
-			if (appUrl != null) {
-				bot.getBot().execute(new SetWebhook().url(appUrl + "/" + token));
-			}
+		KickerRatingBot bot = new KickerRatingBot();
+		String token = bot.getToken();
+		post("/" + token, bot);
+		if (appUrl != null) {
+			bot.getBot().execute(new SetWebhook().url(appUrl + "/" + token));
 		}
 
 		// can declare other routes
-		get("/", (req, res) -> "index page");
-		get("/hello", (req, res) -> "Hello World");
-		post("/test", new Test());
-		get("/test", new Test());
+		get("/", (req, res) -> "Оу, не ожидал тебя здесь увидеть....");
 	}
 
-	/**
-	 * This test uses the values from the example towards the end of Glickman's paper as a simple test of the
-	 * calculation engine
-	 * In addition, we have another player who doesn't compete, in order to test that their deviation will have
-	 * increased over time.
-	 */
 	public void test() throws IOException, JSONException {
 		init("player1", "player2", "player3", "player4");
 		printResults("Before");
@@ -119,12 +102,5 @@ public class Main {
 		db.put(player3.getUid(), player3.toArray());
 		db.put(player4.getUid(), player4.toArray());
 		Files.writeString(Path.of("db.json"), db.toString(4));//TODO remove indent
-	}
-
-	private static class Test implements Route {
-		@Override
-		public Object handle(Request request, Response response) {
-			return "ok, test";
-		}
 	}
 }
