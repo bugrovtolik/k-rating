@@ -19,7 +19,7 @@ public class KickerRatingBot implements Route {
 		Update update = BotUtils.parseUpdate(request.body());
 		Message message = update.message();
 		Long chatId = message.chat().id();
-		System.out.println("handling: " + chatId);
+		System.out.println("handling: " + message.text());
 
 		if ("newResult".equals(message.text())) {
 			bot.execute(new SendMessage(chatId, "new Result indeed"));
