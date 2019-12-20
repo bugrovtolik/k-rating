@@ -22,13 +22,13 @@ public class KickerRatingBot implements Route {
         Long chatId = message.chat().id();
         System.out.println("handling: " + message.text());
 
-        if ("/newResult".equals(message.text())) {
+        if ("/newresult".equals(message.text())) {
             bot.execute(new SendMessage(chatId, "").replyMarkup(new ReplyKeyboardMarkup(
                     new String[]{"player1"},
                     new String[]{"player2"},
                     new String[]{"player3"}
             )));
-        } else if ("/showRating".equals(message.text())) {
+        } else if ("/showrating".equals(message.text())) {
             bot.execute(new SendMessage(chatId, """
                     player1 - 2000
                     player3 - 2400
