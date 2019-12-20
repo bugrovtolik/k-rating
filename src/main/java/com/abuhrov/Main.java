@@ -26,9 +26,7 @@ public class Main {
 		ApiContextInitializer.init();
 		TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
 		try {
-			DefaultBotOptions options = new DefaultBotOptions();
-			options.setBaseUrl(System.getenv("APP_URL"));
-			telegramBotsApi.registerBot(new KickerRatingBot()).setOptions(options);
+			telegramBotsApi.registerBot(new KickerRatingBot());
 		} catch (TelegramApiRequestException e) {
 			System.out.println(e.toString());
 		}
