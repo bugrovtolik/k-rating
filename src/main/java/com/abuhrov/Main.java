@@ -1,18 +1,15 @@
 package com.abuhrov;
 
-import com.pengrad.telegrambot.request.SetWebhook;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import spark.Request;
-import spark.Response;
-import spark.Route;
+import org.telegram.telegrambots.ApiContextInitializer;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import static spark.Spark.*;
 
 public class Main {
 	private JSONObject db;
@@ -23,26 +20,11 @@ public class Main {
 	private Rating player3;
 	private Rating player4;
 
-	public static void main(String[] args) {
-		System.out.println("in main");
-
-		final String portNumber = System.getenv("PORT");
-		if (portNumber != null) {
-			port(Integer.parseInt(portNumber));
-		}
-
-		final String appUrl = System.getenv("APP_URL");
-
-		// define list of bots
+	public static void main(String[] args) throws TelegramApiRequestException {
 		KickerRatingBot bot = new KickerRatingBot();
-		String token = bot.getToken();
-		post("/" + token, bot);
-		if (appUrl != null) {
-			bot.getBot().execute(new SetWebhook().url(appUrl + "/" + token));
-		}
-
-		// can declare other routes
-		get("/", (req, res) -> "Оу, не ожидал тебя здесь увидеть....");
+		ApiContextInitializer.init();
+		TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
+		telegramBotsApi.registerBot(bot);
 	}
 
 	public void test() throws IOException, JSONException {
