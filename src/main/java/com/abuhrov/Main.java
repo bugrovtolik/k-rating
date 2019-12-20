@@ -4,8 +4,10 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.telegram.telegrambots.ApiContextInitializer;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
+import org.telegram.telegrambots.meta.generics.BotOptions;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,11 +23,12 @@ public class Main {
 	private Rating player4;
 
 	public static void main(String[] args) {
-		KickerRatingBot bot = new KickerRatingBot();
 		ApiContextInitializer.init();
 		TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
 		try {
-			telegramBotsApi.registerBot(bot);
+			DefaultBotOptions options = new DefaultBotOptions();
+			options.setBaseUrl(System.getenv("APP_URL"));
+			telegramBotsApi.registerBot(new KickerRatingBot()).setOptions(options);
 		} catch (TelegramApiRequestException e) {
 			System.out.println(e.toString());
 		}
