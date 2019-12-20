@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.abuhrov</groupId>
-    <artifactId>KickerRating</artifactId>
+    <artifactId>TestMaven</artifactId>
     <version>1.0-SNAPSHOT</version>
     <dependencies>
         <dependency>
@@ -25,7 +25,7 @@
         </dependency>
     </dependencies>
 
-    <name>KickerRating</name>
+    <name>TestMaven</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
