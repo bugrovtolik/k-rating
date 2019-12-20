@@ -20,11 +20,15 @@ public class Main {
 	private Rating player3;
 	private Rating player4;
 
-	public static void main(String[] args) throws TelegramApiRequestException {
+	public static void main(String[] args) {
 		KickerRatingBot bot = new KickerRatingBot();
 		ApiContextInitializer.init();
 		TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
-		telegramBotsApi.registerBot(bot);
+		try {
+			telegramBotsApi.registerBot(bot);
+		} catch (TelegramApiRequestException e) {
+			System.out.println(e.toString());
+		}
 	}
 
 	public void test() throws IOException, JSONException {

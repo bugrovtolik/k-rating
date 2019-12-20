@@ -35,7 +35,7 @@ public class KickerRatingBot extends TelegramLongPollingBot {
     }
 
     public String getBotUsername() {
-        return "KickerRatingBot";
+        return "kickerratingbot";
     }
 
     public String getBotToken() {
