@@ -1,1 +1,1 @@
-web: java -Xmx300m -Xss512k -XX:MetaspaceSize=100M -javaagent:./lib/heroku-javaagent-2.0.jar=stdout=true,lxmem=true -Dserver.port=$PORT -Dspring.profiles.active=heroku -cp target/classes/:target/dependency/* com.abuhrov.Main
+java $JAVA_OPTS -jar target/KickerRating-1.0-SNAPSHOT.jar
