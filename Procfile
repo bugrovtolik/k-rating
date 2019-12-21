@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS -jar target/KickerRating-1.0-SNAPSHOT.jar
+web: java -cp target/classes/:target/dependency/* com.abuhrov.Main
