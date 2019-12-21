@@ -83,11 +83,12 @@ public class Control {
     static void newPlayer(String name) {
         try {
             Rating player = getPlayer(name);
+            System.out.println("((" + db.toString());
             db.put(player.getUid(), player.toArray());
-            System.out.println(db.toString());
+            System.out.println("))" + db.toString());
             Files.writeString(Path.of("db.json"), db.toString());
         } catch (Exception ignored) {
-            System.out.println(ignored);
+            System.out.println("i " + ignored);
         }
     }
 }
