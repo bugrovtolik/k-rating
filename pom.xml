@@ -54,21 +54,17 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
+                <groupId>de.ntcomputer</groupId>
+                <artifactId>executable-packer-maven-plugin</artifactId>
+                <version>1.0.1</version>
+                <configuration>
+                    <mainClass>com.abuhrov.Main</mainClass>
+                </configuration>
                 <executions>
                     <execution>
-                        <id>copy-dependencies</id>
-                        <phase>prepare-package</phase>
                         <goals>
-                            <goal>copy-dependencies</goal>
+                            <goal>pack-executable-jar</goal>
                         </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/classes/lib</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
