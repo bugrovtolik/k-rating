@@ -19,16 +19,13 @@ public class KickerRatingBot extends TelegramLongPollingBot {
         SendMessage message = new SendMessage().setChatId(update.getMessage().getChatId());
 
         if ("Охрана отмєна".equals(update.getMessage().getText())) {
-            history = null;
-            player1 = null;
-            player2 = null;
-            player3 = null;
-            player4 = null;
+            clean();
         } else if (history != null) {
             if ("/addplayer".equals(history)) {
                 history = null;
                 Control.savePlayer(Control.getPlayer(update.getMessage().getText()));
-                message.setText("Додано гравця " + update.getMessage().getText()).setReplyMarkup(null);;
+                message.setText("Додано гравця " + update.getMessage().getText())
+                        .setReplyMarkup(ReplyKeyboardBuilder.createReply().build());
             } else if ("/newresult".equals(history)) {
                 var builder = ReplyKeyboardBuilder.createReply();
                 Iterator<String> iterator = Control.getPlayersIterator();
@@ -60,7 +57,7 @@ public class KickerRatingBot extends TelegramLongPollingBot {
 
                     message.setReplyMarkup(builder.build());
                 } else {
-                    message.setText("Готово").setReplyMarkup(null);
+                    message.setText("Готово").setReplyMarkup(ReplyKeyboardBuilder.createReply().build());
 
                     if ("Ми".equals(update.getMessage().getText())) {
                         Control.calculate(player1, player2, player3, player4);
@@ -72,6 +69,8 @@ public class KickerRatingBot extends TelegramLongPollingBot {
                     Control.savePlayer(player2);
                     Control.savePlayer(player3);
                     Control.savePlayer(player4);
+
+                    clean();
                 }
             }
         } else {
@@ -106,6 +105,14 @@ public class KickerRatingBot extends TelegramLongPollingBot {
             sendApiMethod(message);
         } catch (TelegramApiException ignored) {
         }
+    }
+
+    private void clean() {
+        history = null;
+        player1 = null;
+        player2 = null;
+        player3 = null;
+        player4 = null;
     }
 
     public String getBotUsername() {
