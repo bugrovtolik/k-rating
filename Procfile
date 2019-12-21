@@ -1,1 +1,1 @@
-web: java -jar target/classes/:target/dependency/* com.abuhrov.Bot
+worker: sh target/bin/workerBot
