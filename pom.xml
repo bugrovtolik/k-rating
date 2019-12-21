@@ -84,19 +84,6 @@
                     </archive>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>com.heroku.sdk</groupId>
-                <artifactId>heroku-maven-plugin</artifactId>
-                <version>1.1.1</version>
-                <configuration>
-                    <appName>KickerRating</appName>
-                    <includeTarget>false</includeTarget>
-                    <jdkVersion>13</jdkVersion>
-                    <processTypes>
-                        <web>java $JAVA_OPTS -jar target/KickerRating-1.0-SNAPSHOT.jar</web>
-                    </processTypes>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 </project>
