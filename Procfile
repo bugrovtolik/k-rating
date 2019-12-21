@@ -1,1 +1,1 @@
-web: $JAVA_OPTS -Dserver.port=$PORT java -jar target/classes/:target/dependency/* com.abuhrov.Main
+web: java -Xmx300m -Xss512k -XX:MetaspaceSize=100M -javaagent:./lib/heroku-javaagent-2.0.jar=stdout=true,lxmem=true -Dserver.port=$PORT -Dspring.profiles.active=heroku -cp target/classes/:target/dependency/* com.abuhrov.Main
