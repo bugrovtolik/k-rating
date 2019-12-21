@@ -24,7 +24,8 @@ public class Control {
         } catch (Exception e) {
             try {
                 Files.writeString(Path.of("db.json"), "{}");
-            } catch (IOException ex) {
+                db = new JSONObject(Files.readString(Path.of("db.json")));
+            } catch (Exception ex) {
                 System.out.println("ex " + ex);
             }
         }
