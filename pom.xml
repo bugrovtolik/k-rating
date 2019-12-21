@@ -80,8 +80,8 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <!-- <classpathPrefix>lib</classpathPrefix> -->
-                            <!-- <mainClass>test.org.Cliente</mainClass> -->
+                             <classpathPrefix>lib</classpathPrefix>
+                             <mainClass>com.abuhrov.Main</mainClass>
                         </manifest>
                         <manifestEntries>
                             <Class-Path>lib/</Class-Path>
