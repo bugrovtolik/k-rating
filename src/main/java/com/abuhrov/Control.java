@@ -46,8 +46,8 @@ public class Control {
     }
 
     private static Rating getPlayer(String name) throws JSONException {
-        JSONArray jsonArray = db.getJSONArray(name);
-        if (jsonArray != null) {
+        if (db.has(name)) {
+            JSONArray jsonArray = db.getJSONArray(name);
             return new Rating(name, (Double) jsonArray.get(0), (Double) jsonArray.get(1), (Double) jsonArray.get(2),
                     (Integer) jsonArray.get(3));
         }
