@@ -7,15 +7,14 @@ import org.codehaus.jettison.json.JSONObject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 public class Control {
     private static RatingCalculator ratingSystem;
     private static JSONObject db;
-    private RatingPeriodResults results = new RatingPeriodResults();
-    private Rating player1;
-    private Rating player2;
-    private Rating player3;
-    private Rating player4;
 
     static {
         ratingSystem = new RatingCalculator(0.06, 0.5);
@@ -31,9 +30,8 @@ public class Control {
         }
     }
 
-    public void test() throws IOException, JSONException {
-        init("player1", "player2", "player3", "player4");
-        printResults("Before");
+    static void calculate(Rating player1, Rating player2, Rating player3, Rating player4) {
+        RatingPeriodResults results = new RatingPeriodResults();
 
         results.addResult(player1, player3);
         results.addResult(player1, player4);
@@ -41,35 +39,19 @@ public class Control {
         results.addResult(player2, player4);
 
         ratingSystem.updateRatings(results);
-
-        printResults("After");
     }
 
-    private static Rating getPlayer(String name) throws JSONException {
+    static Rating getPlayer(String name) {
         if (db.has(name)) {
-            JSONArray jsonArray = db.getJSONArray(name);
-            return new Rating(name, (Double) jsonArray.get(0), (Double) jsonArray.get(1), (Double) jsonArray.get(2),
-                    (Integer) jsonArray.get(3));
+            try {
+                JSONArray jsonArray = db.getJSONArray(name);
+                return new Rating(name, (Double) jsonArray.get(0), (Double) jsonArray.get(1), (Double) jsonArray.get(2),
+                        (Integer) jsonArray.get(3));
+            } catch (JSONException ignored) {
+            }
         }
 
         return new Rating(name, ratingSystem);
-    }
-
-    private static void init(String name1, String name2, String name3, String name4) throws IOException, JSONException {
-        db = new JSONObject(Files.readString(Path.of("db.json")));
-    }
-
-    private void printResults(String text) throws IOException, JSONException {
-        System.out.println(text + "...");
-        System.out.println(player1);
-        System.out.println(player2);
-        System.out.println(player3);
-        System.out.println(player4);
-
-
-        JSONObject db = new JSONObject(Files.readString(Path.of("db.json")));
-
-        System.out.println(db.toString());
     }
 
     static String read() {
@@ -80,15 +62,19 @@ public class Control {
         }
     }
 
-    static void newPlayer(String name) {
+    static Iterator<String> getPlayersIterator() {
         try {
-            Rating player = getPlayer(name);
-            System.out.println("((" + db.toString());
+            return new JSONObject(Files.readString(Path.of("db.json"))).keys();
+        } catch (Exception e) {
+            return Collections.emptyIterator();
+        }
+    }
+
+    static void savePlayer(Rating player) {
+        try {
             db.put(player.getUid(), player.toArray());
-            System.out.println("))" + db.toString());
             Files.writeString(Path.of("db.json"), db.toString());
         } catch (Exception ignored) {
-            System.out.println("i " + ignored);
         }
     }
 }
