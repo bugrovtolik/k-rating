@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -cp target.classes.com.abuhrov.Main  -Dserver.port=$PORT
+web: java -jar -Dserver.port=$PORT target/KickerRating-1.0-SNAPSHOT.jar
