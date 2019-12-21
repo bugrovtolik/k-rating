@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS -cp target/classes/:target/dependency/* com.abuhrov.Main
+java -Dserver.port=$PORT $JAVA_OPTS -jar target/*.jar
