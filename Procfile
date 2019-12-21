@@ -1,1 +1,1 @@
-bot: java -jar target/KickerRating-1.0-SNAPSHOT.jar
+web: java -jar target/KickerRating-1.0-SNAPSHOT.jar
