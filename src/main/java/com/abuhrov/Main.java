@@ -2,7 +2,6 @@ package com.abuhrov;
 
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 public class Main {
 	public static void main(String[] args) {
@@ -10,7 +9,7 @@ public class Main {
 		TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
 		try {
 			telegramBotsApi.registerBot(new KickerRatingBot());
-		} catch (TelegramApiRequestException e) {
+		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
 	}
