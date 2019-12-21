@@ -21,7 +21,12 @@ public class Control {
         ratingSystem = new RatingCalculator(0.06, 0.5);
         try {
             db = new JSONObject(Files.readString(Path.of("db.json")));
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            try {
+                Files.writeString(Path.of("db.json"), "{}");
+            } catch (IOException ex) {
+                System.out.println("ex " + ex);
+            }
         }
     }
 
