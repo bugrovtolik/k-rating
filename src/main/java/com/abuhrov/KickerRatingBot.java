@@ -95,9 +95,10 @@ public class KickerRatingBot extends TelegramLongPollingBot {
                     yield message.setText("Обери себе").setReplyMarkup(builder.build());
                 }
                 case "/showrating":
-                    yield message.setText(Control.read());
+                    yield message.setText(Control.read()).setReplyMarkup(ReplyKeyboardBuilder.createReply().build());
                 default:
-                    yield message.setText("Користуйся краще готовими командами, я не настільки розумний..");
+                    yield message.setText("Користуйся краще готовими командами, я не настільки розумний..")
+                            .setReplyMarkup(ReplyKeyboardBuilder.createReply().build());
             };
         }
 
