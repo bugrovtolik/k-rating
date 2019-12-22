@@ -31,11 +31,12 @@ public class Database {
 
     public void save(JSONObject db) {
         try {
-            cloudinary.uploader().upload(db, ObjectUtils.asMap(
+            Files.writeString(Path.of("db.json"), db.toString());
+            cloudinary.uploader().upload(new File("db.json"), ObjectUtils.asMap(
                     "public_id", "db.json",
                     "resource_type", "raw"
             ));
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println(e.toString());
         }
     }
