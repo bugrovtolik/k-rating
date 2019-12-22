@@ -4,28 +4,13 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.Iterator;
+import java.util.*;
 
 public class Control {
-    private static RatingCalculator ratingSystem;
-    private static JSONObject db;
-
-    static {
-        ratingSystem = new RatingCalculator(0.06, 0.5);
-        try {
-            db = new JSONObject(Files.readString(Path.of("db.json")));
-        } catch (Exception e) {
-            try {
-                Files.writeString(Path.of("db.json"), "{}");
-                db = new JSONObject(Files.readString(Path.of("db.json")));
-            } catch (Exception ex) {
-                System.out.println("ex " + ex);
-            }
-        }
-    }
+    private static RatingCalculator ratingSystem = new RatingCalculator(0.06, 0.5);
 
     static void calculate(Rating player1, Rating player2, Rating player3, Rating player4) {
         RatingPeriodResults results = new RatingPeriodResults();
@@ -39,6 +24,7 @@ public class Control {
     }
 
     static Rating getPlayer(String name) {
+        JSONObject db = getDB();
         if (db.has(name)) {
             try {
                 JSONArray jsonArray = db.getJSONArray(name);
@@ -51,27 +37,51 @@ public class Control {
         return new Rating(name, ratingSystem);
     }
 
-    static String read() {
-        try {
-            return new JSONObject(Files.readString(Path.of("db.json"))).toString(4);
-        } catch (Exception e) {
-            return "";
-        }
-    }
+//    static String read() {
+//        StringBuilder rating = new StringBuilder();
+//        JSONObject db = getDB();
+//        Iterator<String> keys = db.keys();
+//        Map<String, Double> map = new TreeMap<>();
+//
+//        while (keys.hasNext()) {
+//            String playerName = keys.next();
+//            try {
+//                JSONArray stats = (JSONArray) db.get(playerName);
+//                rating.append(playerName).append(" - ").stats.getDouble(0);
+//
+//                sorted =
+//                        map.entrySet().stream()
+//                                .sorted(Map.Entry.comparingByValue());
+//            } catch (JSONException ignored) {
+//            }
+//        }
+//    }
 
     static Iterator<String> getPlayersIterator() {
-        try {
-            return new JSONObject(Files.readString(Path.of("db.json"))).keys();
-        } catch (Exception e) {
-            return Collections.emptyIterator();
-        }
+        return getDB().keys();
     }
 
     static void savePlayer(Rating player) {
+        JSONObject db = getDB();
         try {
             db.put(player.getUid(), player.toArray());
             Files.writeString(Path.of("db.json"), db.toString());
         } catch (Exception ignored) {
         }
+    }
+
+    static JSONObject getDB() {
+        JSONObject db;
+        try {
+             db = new JSONObject(Files.readString(Path.of("db.json")));
+        } catch (Exception e) {
+            db = new JSONObject();
+            try {
+                Files.writeString(Path.of("db.json"), "{}");
+            } catch (IOException ignored) {
+            }
+        }
+
+        return db;
     }
 }

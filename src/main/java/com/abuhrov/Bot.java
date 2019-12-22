@@ -95,7 +95,7 @@ public class Bot extends TelegramLongPollingBot {
                     yield message.setText("Обери себе").setReplyMarkup(builder.build());
                 }
                 case "/showrating":
-                    yield message.setText(Control.read()).setReplyMarkup(ReplyKeyboardBuilder.createReply().build());
+                    yield message.setText(Control.getDB().toString()).setReplyMarkup(ReplyKeyboardBuilder.createReply().build());
                 default:
                     yield message.setText("Користуйся краще готовими командами, я не настільки розумний..")
                             .setReplyMarkup(ReplyKeyboardBuilder.createReply().build());

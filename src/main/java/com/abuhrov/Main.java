@@ -5,8 +5,12 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import spark.Spark;
 
+import java.io.File;
+
 public class Main {
     public static void main(String[] args) {
+        System.out.println(new File("").getAbsolutePath());
+        System.out.println(System.getenv("PORT"));
         if (System.getenv("PORT") != null) {
             Spark.port(Integer.parseInt(System.getenv("PORT")));
         }
