@@ -65,7 +65,7 @@ public class Control {
         JSONObject db = getDB();
         try {
             db.put(player.getUid(), player.toArray());
-            Files.writeString(Path.of("db.json"), db.toString());
+            Files.writeString(Path.of("../db.json"), db.toString());
         } catch (Exception ignored) {
         }
     }
@@ -73,11 +73,11 @@ public class Control {
     static JSONObject getDB() {
         JSONObject db;
         try {
-             db = new JSONObject(Files.readString(Path.of("db.json")));
+             db = new JSONObject(Files.readString(Path.of("../db.json")));
         } catch (Exception e) {
             db = new JSONObject();
             try {
-                Files.writeString(Path.of("db.json"), "{}");
+                Files.writeString(Path.of("../db.json"), "{}");
             } catch (IOException ignored) {
             }
         }
