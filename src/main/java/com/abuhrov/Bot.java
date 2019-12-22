@@ -41,7 +41,7 @@ public class Bot extends TelegramLongPollingBot {
 
         if (ABORT_UKR.equals(update.getMessage().getText())) {
             clean();
-            message.setText(OKAY_UKR + update.getMessage().getText()).setReplyMarkup(getDefaultReply());
+            message.setText(OKAY_UKR).setReplyMarkup(getDefaultReply());
         } else if (prevMessage != null) {
             if (ADD_PLAYER.equals(prevMessage)) {
                 prevMessage = null;
