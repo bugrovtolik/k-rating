@@ -3,9 +3,6 @@ package com.abuhrov;
 import org.cloudinary.json.JSONArray;
 import org.cloudinary.json.JSONObject;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Iterator;
 
 public class Control {
@@ -62,10 +59,6 @@ public class Control {
     static void savePlayer(Rating player) {
         JSONObject db = database.get();
         db.put(player.getUid(), player.toArray());
-        try {
-            Files.writeString(Path.of("../db.json"), db.toString());//no more files :)
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        database.save(db);
     }
 }
