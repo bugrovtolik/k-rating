@@ -1,16 +1,16 @@
 package com.abuhrov;
 
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
+import org.cloudinary.json.JSONArray;
+import org.cloudinary.json.JSONObject;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Iterator;
 
 public class Control {
     private static RatingCalculator ratingSystem = new RatingCalculator(0.06, 0.5);
+    private static Database database = Database.getInstance();
 
     static void calculate(Rating player1, Rating player2, Rating player3, Rating player4) {
         RatingPeriodResults results = new RatingPeriodResults();
@@ -24,14 +24,12 @@ public class Control {
     }
 
     static Rating getPlayer(String name) {
-        JSONObject db = getDB();
+        JSONObject db = database.get();
         if (db.has(name)) {
-            try {
-                JSONArray jsonArray = db.getJSONArray(name);
-                return new Rating(name, (Double) jsonArray.get(0), (Double) jsonArray.get(1), (Double) jsonArray.get(2),
-                        (Integer) jsonArray.get(3));
-            } catch (JSONException ignored) {
-            }
+            JSONArray jsonArray = db.getJSONArray(name);
+            return new Rating(name, (Double) jsonArray.get(0), (Double) jsonArray.get(1), (Double) jsonArray.get(2),
+                    (Integer) jsonArray.get(3));
+
         }
 
         return new Rating(name, ratingSystem);
@@ -58,30 +56,16 @@ public class Control {
 //    }
 
     static Iterator<String> getPlayersIterator() {
-        return getDB().keys();
+        return database.get().keys();
     }
 
     static void savePlayer(Rating player) {
-        JSONObject db = getDB();
+        JSONObject db = database.get();
+        db.put(player.getUid(), player.toArray());
         try {
-            db.put(player.getUid(), player.toArray());
-            Files.writeString(Path.of("../db.json"), db.toString());
-        } catch (Exception ignored) {
+            Files.writeString(Path.of("../db.json"), db.toString());//no more files :)
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-    }
-
-    static JSONObject getDB() {
-        JSONObject db;
-        try {
-             db = new JSONObject(Files.readString(Path.of("../db.json")));
-        } catch (Exception e) {
-            db = new JSONObject();
-            try {
-                Files.writeString(Path.of("../db.json"), "{}");
-            } catch (IOException ignored) {
-            }
-        }
-
-        return db;
     }
 }
