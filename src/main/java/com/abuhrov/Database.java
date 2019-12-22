@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 
 public class Database {
     private static volatile Database instance;
@@ -32,6 +33,7 @@ public class Database {
     public void save(JSONObject db) {
         try {
             Files.writeString(Path.of("db.json"), db.toString());
+            cloudinary.api().deleteResources(Collections.singleton("db.json"), null);
             cloudinary.uploader().upload(new File("db.json"), ObjectUtils.asMap(
                     "public_id", "db.json",
                     "resource_type", "raw"
