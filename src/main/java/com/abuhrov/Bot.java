@@ -28,6 +28,7 @@ public class Bot extends TelegramLongPollingBot {
     private static final String WE_UKR = "Ми";
     private static final String THEY_UKR = "Вони";
     private static final String READY_UKR = "Готово";
+    private static final String OKAY_UKR = "Як скажеш";
     private String prevMessage;
     private Rating player1;
     private Rating player2;
@@ -40,6 +41,7 @@ public class Bot extends TelegramLongPollingBot {
 
         if (ABORT_UKR.equals(update.getMessage().getText())) {
             clean();
+            message.setText(OKAY_UKR + update.getMessage().getText()).setReplyMarkup(getDefaultReply());
         } else if (prevMessage != null) {
             if (ADD_PLAYER.equals(prevMessage)) {
                 prevMessage = null;
