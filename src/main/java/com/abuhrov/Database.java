@@ -48,12 +48,8 @@ public class Database {
         try {
             FileUtils.copyURLToFile(new URL("https://res.cloudinary.com/bugrovtolik/raw/upload/db.json"),
                     new File("db.json"));
-
-            System.out.println("here");
-            System.out.println(Files.readString(Path.of("db.json")));
             db = new JSONObject(Files.readString(Path.of("db.json")));
         } catch (IOException e) {
-            System.out.println("there");
             db = new JSONObject();
         }
 

@@ -1,9 +1,13 @@
 package com.abuhrov;
 
 import org.cloudinary.json.JSONArray;
+import org.cloudinary.json.JSONException;
 import org.cloudinary.json.JSONObject;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 public class Control {
     private static RatingCalculator ratingSystem = new RatingCalculator(0.06, 0.5);
@@ -32,25 +36,27 @@ public class Control {
         return new Rating(name, ratingSystem);
     }
 
-//    static String read() {
-//        StringBuilder rating = new StringBuilder();
-//        JSONObject db = getDB();
-//        Iterator<String> keys = db.keys();
-//        Map<String, Double> map = new TreeMap<>();
-//
-//        while (keys.hasNext()) {
-//            String playerName = keys.next();
-//            try {
-//                JSONArray stats = (JSONArray) db.get(playerName);
-//                rating.append(playerName).append(" - ").stats.getDouble(0);
-//
-//                sorted =
-//                        map.entrySet().stream()
-//                                .sorted(Map.Entry.comparingByValue());
-//            } catch (JSONException ignored) {
-//            }
-//        }
-//    }
+    static String getRatingList() {
+        StringBuilder rating = new StringBuilder();
+        JSONObject db = database.get();
+
+        Iterator<String> keys = db.keys();
+        if (keys.hasNext()) {
+            Map<String, Double> map = new HashMap<>();
+
+            while (keys.hasNext()) {
+                String key = keys.next();
+                map.put(key, (Double) ((JSONArray) db.get(key)).get(0));
+            }
+
+            map.entrySet().stream()
+                    .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                    .forEach((e) -> rating.append(e.getKey()).append("  -  ")
+                            .append(e.getValue()).append(System.getProperty("line.separator")));
+        }
+
+        return rating.toString();
+    }
 
     static Iterator<String> getPlayersIterator() {
         return database.get().keys();
