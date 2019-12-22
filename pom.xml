@@ -47,10 +47,16 @@
                 <configuration>
                     <release>13</release>
                     <compilerArgs>
-                        <arg>--enable-preview</arg>
+                        --enable-preview
                     </compilerArgs>
-                    <optimize>true</optimize>
-                    <debug>true</debug>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M3</version>
+                <configuration>
+                    <argLine>--enable-preview</argLine>
                 </configuration>
             </plugin>
             <plugin>
