@@ -1,20 +1,15 @@
 package com.abuhrov;
 
 import com.cloudinary.Cloudinary;
-import com.cloudinary.Transformation;
 import com.cloudinary.utils.ObjectUtils;
 import org.apache.commons.io.FileUtils;
 import org.cloudinary.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Database {
     private static volatile Database instance;
@@ -37,7 +32,8 @@ public class Database {
     public void save(JSONObject db) {
         try {
             cloudinary.uploader().upload(db, ObjectUtils.asMap(
-                    "public_id", "db.json"
+                    "public_id", "db.json",
+                    "resource_type", "raw"
             ));
         } catch (IOException e) {
             System.out.println(e.toString());
