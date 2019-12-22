@@ -1,21 +1,14 @@
 package com.abuhrov;
 
-import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.io.FileInputStream;
 import java.util.Iterator;
-import java.util.Properties;
 
 public class Bot extends TelegramLongPollingBot {
-    private static String BOT_NAME;
-    private static String BOT_TOKEN;
-
-    private String history;
+    private String prevMessage;
     private Rating player1;
     private Rating player2;
     private Rating player3;
@@ -27,13 +20,13 @@ public class Bot extends TelegramLongPollingBot {
 
         if ("Охрана отмєна".equals(update.getMessage().getText())) {
             clean();
-        } else if (history != null) {
-            if ("/addplayer".equals(history)) {
-                history = null;
+        } else if (prevMessage != null) {
+            if ("/addplayer".equals(prevMessage)) {
+                prevMessage = null;
                 Control.savePlayer(Control.getPlayer(update.getMessage().getText()));
                 message.setText("Додано гравця " + update.getMessage().getText())
                         .setReplyMarkup(ReplyKeyboardBuilder.createReply().build());
-            } else if ("/newresult".equals(history)) {
+            } else if ("/newresult".equals(prevMessage)) {
                 var builder = ReplyKeyboardBuilder.createReply();
                 Iterator<String> iterator = Control.getPlayersIterator();
                 while (iterator.hasNext()) {
@@ -83,14 +76,14 @@ public class Bot extends TelegramLongPollingBot {
         } else {
             message = switch (update.getMessage().getText()) {
                 case "/addplayer": {
-                    history = "/addplayer";
+                    prevMessage = "/addplayer";
 
                     var builder = ReplyKeyboardBuilder.createReply().row().addText("Охрана отмєна");
 
                     yield message.setText("Введи нікнейм").setReplyMarkup(builder.build());
                 }
                 case "/newresult": {
-                    history = "/newresult";
+                    prevMessage = "/newresult";
 
                     var builder = ReplyKeyboardBuilder.createReply();
                     Iterator<String> iterator = Control.getPlayersIterator();
@@ -116,46 +109,20 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private void clean() {
-        history = null;
+        prevMessage = null;
         player1 = null;
         player2 = null;
         player3 = null;
         player4 = null;
     }
 
-    public static void main(String[] args) {
-        ApiContextInitializer.init();
-        readConfig();
-        TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
-        try {
-            telegramBotsApi.registerBot(new Bot());
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void readConfig() {
-        FileInputStream fis;
-        Properties property = new Properties();
-        try {
-            fis = new FileInputStream("src/main/resources/config.properties");
-            property.load(fis);
-
-            BOT_NAME = property.getProperty("BOT_NAME");
-            BOT_TOKEN = property.getProperty("BOT_TOKEN");
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
     @Override
     public String getBotUsername() {
-        return BOT_NAME;
+        return "@KickerRatingBot";
     }
 
     @Override
     public String getBotToken() {
-        return BOT_TOKEN;
+        return "877837908:AAGFnBbQp2sPQQG67WPmIdT8vXaFRLcIxio";
     }
 }
