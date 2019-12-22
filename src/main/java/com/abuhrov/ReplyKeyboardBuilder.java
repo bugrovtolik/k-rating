@@ -1,7 +1,5 @@
 package com.abuhrov;
 
-import org.telegram.telegrambots.meta.api.objects.LoginUrl;
-import org.telegram.telegrambots.meta.api.objects.games.CallbackGame;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -87,16 +85,6 @@ public class ReplyKeyboardBuilder {
             return this;
         }
 
-        public InlineKeyboardMarkupBuilder addLoginUrl(String text, LoginUrl loginUrl) {
-            row.add(new InlineKeyboardButton(text).setLoginUrl(loginUrl));
-            return this;
-        }
-
-        public InlineKeyboardMarkupBuilder addLoginUrl(String text, String loginUrl) {
-            row.add(new InlineKeyboardButton(text).setLoginUrl(new LoginUrl(loginUrl)));
-            return this;
-        }
-
         public InlineKeyboardMarkupBuilder addCallbackData(String text, String callbackData) {
             row.add(new InlineKeyboardButton(text).setCallbackData(callbackData));
             return this;
@@ -109,16 +97,6 @@ public class ReplyKeyboardBuilder {
 
         public InlineKeyboardMarkupBuilder addsetSwitchInlineQueryCurrentChat(String text, String switchInlineQueryCurrentChat) {
             row.add(new InlineKeyboardButton(text).setSwitchInlineQueryCurrentChat(switchInlineQueryCurrentChat));
-            return this;
-        }
-
-        public InlineKeyboardMarkupBuilder addCallbackGame(String text, CallbackGame callbackGame) {
-            row.add(new InlineKeyboardButton(text).setCallbackGame(callbackGame));
-            return this;
-        }
-
-        public InlineKeyboardMarkupBuilder addPay(String text, boolean pay) {
-            row.add(new InlineKeyboardButton(text).setPay(pay));
             return this;
         }
 
