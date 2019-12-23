@@ -13,21 +13,15 @@ import java.nio.file.Path;
 import java.util.Collections;
 
 public class Database {
-    private static volatile Database instance;
+	private static Database instance;
     private static Cloudinary cloudinary = new Cloudinary("cloudinary://746638216764126:XmFQQYgkpSqobGUVCVFn-nGs2lI@bugrovtolik");
 
-    public static Database getInstance() {
-        Database localInstance = instance;
-        if (localInstance == null) {
-            synchronized (Database.class) {
-                localInstance = instance;
-                if (localInstance == null) {
-                    instance = localInstance = new Database();
-                }
-            }
+	public synchronized static Database getInstance() {
+		if (instance == null) {
+			instance = new Database();
         }
 
-        return localInstance;
+		return instance;
     }
 
     public void save(JSONObject db) {
