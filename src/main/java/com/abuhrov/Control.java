@@ -1,7 +1,6 @@
 package com.abuhrov;
 
 import org.cloudinary.json.JSONArray;
-import org.cloudinary.json.JSONException;
 import org.cloudinary.json.JSONObject;
 
 import java.util.Collections;
@@ -46,7 +45,8 @@ public class Control {
 
             while (keys.hasNext()) {
                 String key = keys.next();
-                map.put(key, (Double) ((JSONArray) db.get(key)).get(0));
+                map.put(key + " (" + (((int) ((JSONArray) db.get(key)).get(3)) / 2) + ")",
+                        Double.valueOf(((JSONArray) db.get(key)).get(0).toString()));
             }
 
             map.entrySet().stream()
@@ -64,7 +64,14 @@ public class Control {
 
     static void savePlayer(Rating player) {
         JSONObject db = database.get();
-        db.put(player.getUid(), player.toArray());
+        JSONArray data = new JSONArray();
+
+        data.put(player.getRating());
+        data.put(player.getRatingDeviation());
+        data.put(player.getVolatility());
+        data.put(player.getNumberOfResults());
+        db.put(player.getUid(), data);
+
         database.save(db);
     }
 }

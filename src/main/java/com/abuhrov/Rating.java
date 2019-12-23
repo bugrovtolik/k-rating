@@ -1,8 +1,5 @@
 package com.abuhrov;
 
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * Holds an individual's Glicko-2 rating.
  *
@@ -129,10 +126,6 @@ public class Rating {
 	@Override
 	public String toString() {
 		return uid + " / " + rating + " / " + ratingDeviation + " / " + volatility + " / " + numberOfResults;
-	}
-
-	public List toArray() {
-		return Arrays.asList(rating, ratingDeviation, volatility, numberOfResults);
 	}
 
 	public int getNumberOfResults() {
