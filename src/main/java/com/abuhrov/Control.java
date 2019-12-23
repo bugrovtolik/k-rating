@@ -16,7 +16,7 @@ public class Control {
         RatingPeriodResults results = new RatingPeriodResults();
 
         results.addResult(player1, player3);
-        results.addResult(player1, player4);
+        results.addResult(player2, player4);
         results.addResult(player2, player3);
         results.addResult(player2, player4);
 
@@ -27,7 +27,8 @@ public class Control {
         JSONObject db = database.get();
         if (db.has(name)) {
             JSONArray jsonArray = db.getJSONArray(name);
-            return new Rating(name, (Double) jsonArray.get(0), (Double) jsonArray.get(1), (Double) jsonArray.get(2),
+            return new Rating(name, Double.parseDouble(jsonArray.get(0).toString()),
+                    Double.parseDouble(jsonArray.get(1).toString()), Double.parseDouble(jsonArray.get(2).toString()),
                     (Integer) jsonArray.get(3));
 
         }
@@ -41,12 +42,12 @@ public class Control {
 
         Iterator<String> keys = db.keys();
         if (keys.hasNext()) {
-            Map<String, Double> map = new HashMap<>();
+            Map<String, Integer> map = new HashMap<>();
 
             while (keys.hasNext()) {
                 String key = keys.next();
                 map.put(key + " (" + (((int) ((JSONArray) db.get(key)).get(3)) / 2) + ")",
-                        Double.valueOf(((JSONArray) db.get(key)).get(0).toString()));
+                        Double.valueOf(((JSONArray) db.get(key)).get(0).toString()).intValue());
             }
 
             map.entrySet().stream()
