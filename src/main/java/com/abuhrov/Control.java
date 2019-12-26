@@ -16,7 +16,7 @@ public class Control {
         RatingPeriodResults results = new RatingPeriodResults();
 
         results.addResult(player1, player3);
-        results.addResult(player2, player4);
+        results.addResult(player1, player4);
         results.addResult(player2, player3);
         results.addResult(player2, player4);
 
@@ -72,6 +72,12 @@ public class Control {
         data.put(player.getVolatility());
         data.put(player.getNumberOfResults());
         db.put(player.getUid(), data);
+
+        database.save(db);
+    }
+
+    public static void clearResults() {
+        JSONObject db = new JSONObject();
 
         database.save(db);
     }
