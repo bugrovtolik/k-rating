@@ -1,1 +1,1 @@
-web: java --enable-preview -cp target/classes:target/dependency/* com.abuhrov.Main
+worker: sh target/bin/KickerRating
