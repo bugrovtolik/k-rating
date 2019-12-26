@@ -15,7 +15,9 @@ public class Bot extends TelegramLongPollingBot {
     private static final String NEW_RESULT_UKR = "Новий результат";
     private static final String SHOW_RATING = "/showrating";
     private static final String SHOW_RATING_UKR = "Відобрази рейтинг";
+    private static final String ABOUT_BOT = "/about";
     private static final String ABOUT_BOT_UKR = "Як ти рахуєш рейтинг?";
+    private static final String ABORT = "/abort";
     private static final String ABORT_UKR = "Охрана отмєна";
     private static final String DEFAULT_UKR = "Користуйся краще готовими командами, я не настільки розумний..";
     private static final String ENTER_NICKNAME_UKR = "Введи нікнейм";
@@ -39,7 +41,7 @@ public class Bot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         SendMessage message = new SendMessage().setChatId(update.getMessage().getChatId());
 
-        if (ABORT_UKR.equals(update.getMessage().getText())) {
+        if (ABORT_UKR.equals(update.getMessage().getText()) || ABORT.equals(update.getMessage().getText())) {
             clean();
             message.setText(OKAY_UKR).setReplyMarkup(getDefaultReply());
         } else if (prevMessage != null) {
@@ -117,6 +119,8 @@ public class Bot extends TelegramLongPollingBot {
                 }
                 case SHOW_RATING, SHOW_RATING_UKR:
                     yield message.setText(Control.getRatingList()).setReplyMarkup(getDefaultReply());
+                case ABOUT_BOT, ABOUT_BOT_UKR:
+                    yield message.setText("http://www.glicko.net/glicko/glicko2.pdf").setReplyMarkup(getDefaultReply());
                 default:
                     yield message.setText(DEFAULT_UKR).setReplyMarkup(getDefaultReply());
             };
