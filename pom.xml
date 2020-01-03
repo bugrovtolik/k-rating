@@ -54,7 +54,7 @@
                     <assembleDirectory>target</assembleDirectory>
                     <programs>
                         <program>
-                            <mainClass>com.abuhrov.Bot</mainClass>
+                            <mainClass>com.abuhrov.Main</mainClass>
                             <name>KickerRating</name>
                         </program>
                     </programs>
