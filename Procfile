@@ -1,1 +1,1 @@
-worker: sh --enable-preview target/bin/KickerRating
+worker: sh target/bin/KickerRating
