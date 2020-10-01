@@ -3,10 +3,7 @@ package com.abuhrov;
 import org.cloudinary.json.JSONArray;
 import org.cloudinary.json.JSONObject;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 public class Control {
     private static final RatingCalculator ratingSystem = new RatingCalculator(0.06, 0.5);
@@ -63,15 +60,18 @@ public class Control {
         return database.get().keys();
     }
 
-    static void savePlayer(Rating player) {
+    static void savePlayers(List<Rating> players) {
         JSONObject db = database.get();
-        JSONArray data = new JSONArray();
+        players.forEach(player -> {
+            JSONArray data = new JSONArray();
 
-        data.put(player.getRating());
-        data.put(player.getRatingDeviation());
-        data.put(player.getVolatility());
-        data.put(player.getNumberOfResults());
-        db.put(player.getUid(), data);
+            data.put(player.getRating());
+            data.put(player.getRatingDeviation());
+            data.put(player.getVolatility());
+            data.put(player.getNumberOfResults());
+
+            db.put(player.getUid(), data);
+        });
 
         database.save(db);
     }

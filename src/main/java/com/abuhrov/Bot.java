@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.Iterator;
+import java.util.List;
 
 public class Bot extends TelegramLongPollingBot {
     private static final String ADD_PLAYER = "/addplayer";
@@ -51,7 +52,7 @@ public class Bot extends TelegramLongPollingBot {
         } else if (prevMessage != null) {
             if (ADD_PLAYER.equals(prevMessage)) {
                 prevMessage = null;
-                Control.savePlayer(Control.getPlayer(update.getMessage().getText()));
+                Control.savePlayers(List.of(Control.getPlayer(update.getMessage().getText())));
                 message.setText(ADDED_PLAYER_UKR + update.getMessage().getText()).setReplyMarkup(getDefaultReply());
             } else if (NEW_RESULT.equals(prevMessage)) {
                 var builder = ReplyKeyboardBuilder.createReply();
@@ -92,11 +93,7 @@ public class Bot extends TelegramLongPollingBot {
                         Control.calculate(player3, player4, player1, player2);
                     }
 
-                    Control.savePlayer(player1);
-                    Control.savePlayer(player2);
-                    Control.savePlayer(player3);
-                    Control.savePlayer(player4);
-
+                    Control.savePlayers(List.of(player1, player2, player3, player4));
                     clean();
                 }
             }
