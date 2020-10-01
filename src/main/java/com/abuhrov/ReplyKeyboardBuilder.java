@@ -12,9 +12,6 @@ import java.util.List;
 
 public class ReplyKeyboardBuilder {
 
-    private ReplyKeyboardBuilder() {
-    }
-
     public static ReplyKeyboardMarkupBuilder createReply() {
         return new ReplyKeyboardMarkupBuilder();
     }
@@ -25,11 +22,8 @@ public class ReplyKeyboardBuilder {
 
     public static class ReplyKeyboardMarkupBuilder {
 
-        private List<KeyboardRow> keyboard = new ArrayList<>();
+        private final List<KeyboardRow> keyboard = new ArrayList<>();
         private KeyboardRow row = null;
-
-        ReplyKeyboardMarkupBuilder() {
-        }
 
         public ReplyKeyboardMarkupBuilder row() {
             if (row != null) {
@@ -66,11 +60,8 @@ public class ReplyKeyboardBuilder {
 
     public static class InlineKeyboardMarkupBuilder {
 
-        private List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+        private final List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         private List<InlineKeyboardButton> row;
-
-        InlineKeyboardMarkupBuilder() {
-        }
 
         public InlineKeyboardMarkupBuilder row() {
             if (row != null) {
@@ -95,7 +86,8 @@ public class ReplyKeyboardBuilder {
             return this;
         }
 
-        public InlineKeyboardMarkupBuilder addsetSwitchInlineQueryCurrentChat(String text, String switchInlineQueryCurrentChat) {
+        public InlineKeyboardMarkupBuilder addsetSwitchInlineQueryCurrentChat(String text,
+                                                                              String switchInlineQueryCurrentChat) {
             row.add(new InlineKeyboardButton(text).setSwitchInlineQueryCurrentChat(switchInlineQueryCurrentChat));
             return this;
         }

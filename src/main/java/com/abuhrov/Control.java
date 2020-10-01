@@ -9,8 +9,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class Control {
-    private static RatingCalculator ratingSystem = new RatingCalculator(0.06, 0.5);
-    private static Database database = Database.getInstance();
+    private static final RatingCalculator ratingSystem = new RatingCalculator(0.06, 0.5);
+    private static final Database database = Database.getInstance();
 
     static void calculate(Rating player1, Rating player2, Rating player3, Rating player4) {
         RatingPeriodResults results = new RatingPeriodResults();

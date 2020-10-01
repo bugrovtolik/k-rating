@@ -13,7 +13,8 @@ import java.nio.file.Path;
 
 public class Database {
 	private static Database instance;
-    private static Cloudinary cloudinary = new Cloudinary("cloudinary://746638216764126:XmFQQYgkpSqobGUVCVFn-nGs2lI@bugrovtolik");
+    private static final Cloudinary cloudinary =
+            new Cloudinary("cloudinary://746638216764126:XmFQQYgkpSqobGUVCVFn-nGs2lI@bugrovtolik");
 
 	public synchronized static Database getInstance() {
 		if (instance == null) {
