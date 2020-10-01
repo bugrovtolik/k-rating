@@ -9,13 +9,19 @@ public class Control {
     private static final RatingCalculator ratingSystem = new RatingCalculator(0.06, 0.5);
     private static final Database database = Database.getInstance();
 
-    static void calculate(Rating player1, Rating player2, Rating player3, Rating player4) {
+    static void calculate(Rating winner1, Rating winner2, Rating loser1, Rating loser2) {
         RatingPeriodResults results = new RatingPeriodResults();
+        results.addResult(winner1, loser1);
+        results.addResult(winner1, loser2);
+        results.addResult(winner2, loser1);
+        results.addResult(winner2, loser2);
 
-        results.addResult(player1, player3);
-        results.addResult(player1, player4);
-        results.addResult(player2, player3);
-        results.addResult(player2, player4);
+        ratingSystem.updateRatings(results);
+    }
+
+    static void calculate(Rating winner, Rating loser) {
+        RatingPeriodResults results = new RatingPeriodResults();
+        results.addResult(winner, loser);
 
         ratingSystem.updateRatings(results);
     }

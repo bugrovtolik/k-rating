@@ -10,11 +10,13 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Bot extends TelegramLongPollingBot {
-    private static final String ADD_PLAYER = "/addplayer";
+    private static final String ADD_PLAYER = "/addPlayer";
     private static final String ADD_PLAYER_UKR = "Додати гравця";
-    private static final String NEW_RESULT = "/newresult";
-    private static final String NEW_RESULT_UKR = "Новий результат";
-    private static final String SHOW_RATING = "/showrating";
+    private static final String NEW_RESULT_1ON1 = "/newResult1on1";
+    private static final String NEW_RESULT_1ON1_UKR = "Новий результат 1 на 1";
+    private static final String NEW_RESULT_2ON2 = "/newResult2on2";
+    private static final String NEW_RESULT_2ON2_UKR = "Новий результат 2 на 2";
+    private static final String SHOW_RATING = "/showRating";
     private static final String SHOW_RATING_UKR = "Відобрази рейтинг";
     private static final String ABOUT_BOT = "/about";
     private static final String ABOUT_BOT_UKR = "Як ти рахуєш рейтинг?";
@@ -25,11 +27,14 @@ public class Bot extends TelegramLongPollingBot {
     private static final String ADDED_PLAYER_UKR = "Додано гравця ";
     private static final String PICK_YOURSELF_UKR = "Обери себе";
     private static final String PICK_TEAMMATE_UKR = "Обери напарника";
+    private static final String PICK_ENEMY_UKR = "Обери суперника";
     private static final String PICK_1ST_ENEMY_UKR = "Обери першого суперника";
     private static final String PICK_2ND_ENEMY_UKR = "Обери другого суперника";
     private static final String WHO_WON_UKR = "Хто переміг?";
     private static final String WE_UKR = "Ми";
+    private static final String I_UKR = "Я";
     private static final String THEY_UKR = "Вони";
+    private static final String HE_UKR = "Він";
     private static final String READY_UKR = "Готово";
     private static final String OKAY_UKR = "Як скажеш";
     private static final String CLEAR_RESULTS = "/clear";
@@ -50,51 +55,91 @@ public class Bot extends TelegramLongPollingBot {
             clean();
             message.setText(OKAY_UKR).setReplyMarkup(getDefaultReply());
         } else if (prevMessage != null) {
-            if (ADD_PLAYER.equals(prevMessage)) {
-                prevMessage = null;
-                Control.savePlayers(List.of(Control.getPlayer(update.getMessage().getText())));
-                message.setText(ADDED_PLAYER_UKR + update.getMessage().getText()).setReplyMarkup(getDefaultReply());
-            } else if (NEW_RESULT.equals(prevMessage)) {
-                var builder = ReplyKeyboardBuilder.createReply();
-                Iterator<String> iterator = Control.getPlayersIterator();
-                while (iterator.hasNext()) {
-                    builder.row().addText(iterator.next());
+            switch (prevMessage) {
+                case ADD_PLAYER -> {
+                    prevMessage = null;
+                    Control.savePlayers(List.of(Control.getPlayer(update.getMessage().getText())));
+                    message.setText(ADDED_PLAYER_UKR + update.getMessage().getText()).setReplyMarkup(getDefaultReply());
                 }
-                builder.row().addText(ABORT_UKR);
-                message.setReplyMarkup(builder.build());
-
-                Rating player = Control.getPlayer(update.getMessage().getText());
-                if (player1 == null) {
-                    player1 = player;
-                    message.setText(PICK_TEAMMATE_UKR);
-                } else if (player2 == null) {
-                    player2 = player;
-                    message.setText(PICK_1ST_ENEMY_UKR);
-                } else if (player3 == null) {
-                    player3 = player;
-                    message.setText(PICK_2ND_ENEMY_UKR);
-                } else if (player4 == null) {
-                    player4 = player;
-
-                    message.setText(WHO_WON_UKR);
-
-                    builder = ReplyKeyboardBuilder.createReply();
-                    builder.row().addText(WE_UKR);
-                    builder.row().addText(THEY_UKR);
-                    builder.row().addText(ABORT_UKR);
-
-                    message.setReplyMarkup(builder.build());
-                } else {
-                    message.setText(READY_UKR).setReplyMarkup(getDefaultReply());
-
-                    if (WE_UKR.equals(update.getMessage().getText())) {
-                        Control.calculate(player1, player2, player3, player4);
-                    } else if (THEY_UKR.equals(update.getMessage().getText())) {
-                        Control.calculate(player3, player4, player1, player2);
+                case NEW_RESULT_1ON1, NEW_RESULT_1ON1_UKR -> {
+                    var builder = ReplyKeyboardBuilder.createReply();
+                    Iterator<String> iterator = Control.getPlayersIterator();
+                    while (iterator.hasNext()) {
+                        builder.row().addText(iterator.next());
                     }
+                    builder.row().addText(ABORT_UKR);
+                    message.setReplyMarkup(builder.build());
 
-                    Control.savePlayers(List.of(player1, player2, player3, player4));
-                    clean();
+                    Rating player = Control.getPlayer(update.getMessage().getText());
+                    if (player1 == null) {
+                        player1 = player;
+                        message.setText(PICK_ENEMY_UKR);
+                    } else if (player2 == null) {
+                        player2 = player;
+
+                        message.setText(WHO_WON_UKR);
+
+                        builder = ReplyKeyboardBuilder.createReply();
+                        builder.row().addText(I_UKR);
+                        builder.row().addText(HE_UKR);
+                        builder.row().addText(ABORT_UKR);
+
+                        message.setReplyMarkup(builder.build());
+                    } else {
+                        message.setText(READY_UKR).setReplyMarkup(getDefaultReply());
+
+                        if (I_UKR.equals(update.getMessage().getText())) {
+                            Control.calculate(player1, player2);
+                        } else if (HE_UKR.equals(update.getMessage().getText())) {
+                            Control.calculate(player2, player1);
+                        }
+
+                        Control.savePlayers(List.of(player1, player2));
+                        clean();
+                    }
+                }
+                case NEW_RESULT_2ON2, NEW_RESULT_2ON2_UKR -> {
+                    var builder = ReplyKeyboardBuilder.createReply();
+                    Iterator<String> iterator = Control.getPlayersIterator();
+                    while (iterator.hasNext()) {
+                        builder.row().addText(iterator.next());
+                    }
+                    builder.row().addText(ABORT_UKR);
+                    message.setReplyMarkup(builder.build());
+
+                    Rating player = Control.getPlayer(update.getMessage().getText());
+                    if (player1 == null) {
+                        player1 = player;
+                        message.setText(PICK_TEAMMATE_UKR);
+                    } else if (player2 == null) {
+                        player2 = player;
+                        message.setText(PICK_1ST_ENEMY_UKR);
+                    } else if (player3 == null) {
+                        player3 = player;
+                        message.setText(PICK_2ND_ENEMY_UKR);
+                    } else if (player4 == null) {
+                        player4 = player;
+
+                        message.setText(WHO_WON_UKR);
+
+                        builder = ReplyKeyboardBuilder.createReply();
+                        builder.row().addText(WE_UKR);
+                        builder.row().addText(THEY_UKR);
+                        builder.row().addText(ABORT_UKR);
+
+                        message.setReplyMarkup(builder.build());
+                    } else {
+                        message.setText(READY_UKR).setReplyMarkup(getDefaultReply());
+
+                        if (WE_UKR.equals(update.getMessage().getText())) {
+                            Control.calculate(player1, player2, player3, player4);
+                        } else if (THEY_UKR.equals(update.getMessage().getText())) {
+                            Control.calculate(player3, player4, player1, player2);
+                        }
+
+                        Control.savePlayers(List.of(player1, player2, player3, player4));
+                        clean();
+                    }
                 }
             }
         } else {
@@ -106,8 +151,8 @@ public class Bot extends TelegramLongPollingBot {
 
                     yield message.setText(ENTER_NICKNAME_UKR).setReplyMarkup(builder.build());
                 }
-                case NEW_RESULT, NEW_RESULT_UKR: {
-                    prevMessage = NEW_RESULT;
+                case NEW_RESULT_1ON1, NEW_RESULT_1ON1_UKR, NEW_RESULT_2ON2, NEW_RESULT_2ON2_UKR: {
+                    prevMessage = update.getMessage().getText();
 
                     var builder = ReplyKeyboardBuilder.createReply();
                     Iterator<String> iterator = Control.getPlayersIterator();
@@ -141,7 +186,8 @@ public class Bot extends TelegramLongPollingBot {
 
     private ReplyKeyboard getDefaultReply() {
         return ReplyKeyboardBuilder.createReply()
-		        .row().addText(NEW_RESULT_UKR)
+		        .row().addText(NEW_RESULT_1ON1_UKR)
+		        .row().addText(NEW_RESULT_2ON2_UKR)
 		        .row().addText(SHOW_RATING_UKR)
 		        .row().addText(ADD_PLAYER_UKR)
 		        .row().addText(ABOUT_BOT_UKR)
