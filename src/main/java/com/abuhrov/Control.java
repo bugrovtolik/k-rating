@@ -41,29 +41,21 @@ public class Control {
 
     static String getRatingList() {
         StringBuilder rating = new StringBuilder();
+        Map<String, Integer> map = new HashMap<>();
         JSONObject db = database.get();
 
-        Iterator<String> keys = db.keys();
-        if (keys.hasNext()) {
-            Map<String, Integer> map = new HashMap<>();
+        Set<String> keys = db.keySet();
+        keys.forEach(key -> map.put(key + " (" + ((JSONArray) db.get(key)).get(3) + ")", Double.valueOf(((JSONArray) db.get(key)).get(0).toString()).intValue()));
 
-            while (keys.hasNext()) {
-                String key = keys.next();
-                map.put(key + " (" + (((int) ((JSONArray) db.get(key)).get(3)) / 2) + ")",
-                        Double.valueOf(((JSONArray) db.get(key)).get(0).toString()).intValue());
-            }
-
-            map.entrySet().stream()
-                    .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
-                    .forEach((e) -> rating.append(e.getKey()).append("  -  ")
-                            .append(e.getValue()).append(System.getProperty("line.separator")));
-        }
+        map.entrySet().stream()
+                .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                .forEach((e) -> rating.append(e.getKey()).append("  -  ").append(e.getValue()).append(System.getProperty("line.separator")));
 
         return rating.toString();
     }
 
-    static Iterator<String> getPlayersIterator() {
-        return database.get().keys();
+    static Set<String> getPlayersList() {
+        return database.get().keySet();
     }
 
     static void savePlayers(List<Rating> players) {

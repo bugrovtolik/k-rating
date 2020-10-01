@@ -132,8 +132,8 @@ public class Rating {
         return numberOfResults;
     }
 
-    public void incrementNumberOfResults(int increment) {
-        this.numberOfResults = numberOfResults + increment;
+    public void incrementNumberOfResults() {
+        this.numberOfResults++;
     }
 
     public String getUid() {

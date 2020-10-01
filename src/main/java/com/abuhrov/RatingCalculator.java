@@ -169,7 +169,7 @@ public class RatingCalculator {
         player.setWorkingRating(player.getGlicko2Rating() + (Math.pow(newPhi, 2) * outcomeBasedRating(player,
                 results)));
         player.setWorkingRatingDeviation(newPhi);
-        player.incrementNumberOfResults(results.size());
+        player.incrementNumberOfResults();
     }
 
     private double f(double x, double delta, double phi, double v, double a, double tau) {

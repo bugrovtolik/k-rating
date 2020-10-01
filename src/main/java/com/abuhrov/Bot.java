@@ -6,8 +6,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Bot extends TelegramLongPollingBot {
     private static final String ADD_PLAYER = "/addPlayer";
@@ -34,7 +34,7 @@ public class Bot extends TelegramLongPollingBot {
     private static final String WE_UKR = "Ми";
     private static final String I_UKR = "Я";
     private static final String THEY_UKR = "Вони";
-    private static final String HE_UKR = "Він";
+    private static final String ENEMY_UKR = "Суперник";
     private static final String READY_UKR = "Готово";
     private static final String OKAY_UKR = "Як скажеш";
     private static final String CLEAR_RESULTS = "/clear";
@@ -62,11 +62,9 @@ public class Bot extends TelegramLongPollingBot {
                     message.setText(ADDED_PLAYER_UKR + update.getMessage().getText()).setReplyMarkup(getDefaultReply());
                 }
                 case NEW_RESULT_1ON1, NEW_RESULT_1ON1_UKR -> {
-                    var builder = ReplyKeyboardBuilder.createReply();
-                    Iterator<String> iterator = Control.getPlayersIterator();
-                    while (iterator.hasNext()) {
-                        builder.row().addText(iterator.next());
-                    }
+                    final var builder = ReplyKeyboardBuilder.createReply();
+                    List<String> players = Control.getPlayersList().stream().sorted().collect(Collectors.toList());
+                    players.forEach(player -> builder.row().addText(player));
                     builder.row().addText(ABORT_UKR);
                     message.setReplyMarkup(builder.build());
 
@@ -79,18 +77,18 @@ public class Bot extends TelegramLongPollingBot {
 
                         message.setText(WHO_WON_UKR);
 
-                        builder = ReplyKeyboardBuilder.createReply();
-                        builder.row().addText(I_UKR);
-                        builder.row().addText(HE_UKR);
-                        builder.row().addText(ABORT_UKR);
+                        var replyBuilder = ReplyKeyboardBuilder.createReply();
+                        replyBuilder.row().addText(I_UKR);
+                        replyBuilder.row().addText(ENEMY_UKR);
+                        replyBuilder.row().addText(ABORT_UKR);
 
-                        message.setReplyMarkup(builder.build());
+                        message.setReplyMarkup(replyBuilder.build());
                     } else {
                         message.setText(READY_UKR).setReplyMarkup(getDefaultReply());
 
                         if (I_UKR.equals(update.getMessage().getText())) {
                             Control.calculate(player1, player2);
-                        } else if (HE_UKR.equals(update.getMessage().getText())) {
+                        } else if (ENEMY_UKR.equals(update.getMessage().getText())) {
                             Control.calculate(player2, player1);
                         }
 
@@ -99,11 +97,9 @@ public class Bot extends TelegramLongPollingBot {
                     }
                 }
                 case NEW_RESULT_2ON2, NEW_RESULT_2ON2_UKR -> {
-                    var builder = ReplyKeyboardBuilder.createReply();
-                    Iterator<String> iterator = Control.getPlayersIterator();
-                    while (iterator.hasNext()) {
-                        builder.row().addText(iterator.next());
-                    }
+                    final var builder = ReplyKeyboardBuilder.createReply();
+                    List<String> players = Control.getPlayersList().stream().sorted().collect(Collectors.toList());
+                    players.forEach(player -> builder.row().addText(player));
                     builder.row().addText(ABORT_UKR);
                     message.setReplyMarkup(builder.build());
 
@@ -122,12 +118,12 @@ public class Bot extends TelegramLongPollingBot {
 
                         message.setText(WHO_WON_UKR);
 
-                        builder = ReplyKeyboardBuilder.createReply();
-                        builder.row().addText(WE_UKR);
-                        builder.row().addText(THEY_UKR);
-                        builder.row().addText(ABORT_UKR);
+                        var replyBuilder = ReplyKeyboardBuilder.createReply();
+                        replyBuilder.row().addText(WE_UKR);
+                        replyBuilder.row().addText(THEY_UKR);
+                        replyBuilder.row().addText(ABORT_UKR);
 
-                        message.setReplyMarkup(builder.build());
+                        message.setReplyMarkup(replyBuilder.build());
                     } else {
                         message.setText(READY_UKR).setReplyMarkup(getDefaultReply());
 
@@ -154,13 +150,11 @@ public class Bot extends TelegramLongPollingBot {
                 case NEW_RESULT_1ON1, NEW_RESULT_1ON1_UKR, NEW_RESULT_2ON2, NEW_RESULT_2ON2_UKR: {
                     prevMessage = update.getMessage().getText();
 
-                    var builder = ReplyKeyboardBuilder.createReply();
-                    Iterator<String> iterator = Control.getPlayersIterator();
-                    while (iterator.hasNext()) {
-                        builder.row().addText(iterator.next());
-                    }
-
+                    final var builder = ReplyKeyboardBuilder.createReply();
+                    List<String> players = Control.getPlayersList().stream().sorted().collect(Collectors.toList());
+                    players.forEach(player -> builder.row().addText(player));
                     builder.row().addText(ABORT_UKR);
+
                     yield message.setText(PICK_YOURSELF_UKR).setReplyMarkup(builder.build());
                 }
                 case SHOW_RATING, SHOW_RATING_UKR:
